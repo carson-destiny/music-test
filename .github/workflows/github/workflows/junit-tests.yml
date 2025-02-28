@@ -3,10 +3,13 @@ name: Run JUnit Tests
 on:
   pull_request:
     branches: [ main ]
+  issue_comment:
+    types: [created]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '/run-tests')
     steps:
     - uses: actions/checkout@v4
     
@@ -31,3 +34,4 @@ jobs:
       if: success() || failure()
       with:
         report_paths: '**/target/surefire-reports/TEST-*.xml'
+
